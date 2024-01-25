@@ -17,6 +17,8 @@ public class Functions {
 	public void newFile() {
 		notepad.textArea.setText("");
 		notepad.setTitle("Untitled File");
+		fileName = null;
+		fileAddress = null;
 	}
 
 	public void openFile() {
@@ -42,22 +44,41 @@ public class Functions {
 		}
 	}
 
-	public void saveAs() {
-		fileDialog = new FileDialog(notepad, "Save", FileDialog.SAVE);
-		fileDialog.setVisible(true);
-
-		if (fileDialog != null) {
-			fileName = fileDialog.getFile();
-			fileAddress = fileDialog.getDirectory();
+	public void save() {
+		System.out.println(fileAddress + fileName);
+		try (FileWriter fileWriter = new FileWriter(fileAddress + fileName)) {
+			fileWriter.write(notepad.textArea.getText());
 			notepad.setTitle(fileName);
+		} catch (IOException e) {
+			System.out.println("Unable to save the file!");
+			throw new RuntimeException(e);
+		}
 
+	}
+
+	public void saveAs() {
+		if (fileName == null) {
+			saveAs();
+		} else {
+			fileDialog = new FileDialog(notepad, "Save As", FileDialog.SAVE);
+			fileDialog.setVisible(true);
+
+			if (fileDialog.getFile() != null) {
+				fileName = fileDialog.getFile();
+				fileAddress = fileDialog.getDirectory();
+				notepad.setTitle(fileName);
+			}
 			try (FileWriter fileWriter = new FileWriter(fileAddress + fileName)) {
 				fileWriter.write(notepad.textArea.getText());
-				fileWriter.close();
+				notepad.setTitle(fileName);
 			} catch (IOException e) {
 				System.out.println("Unable to save the file!");
 				throw new RuntimeException(e);
 			}
 		}
+	}
+
+	public void exit() {
+		System.exit(0);
 	}
 }

@@ -66,6 +66,7 @@ public class Notepad extends JFrame {
 		menuFile.add(saveAsItem);
 		exitItem = new JMenuItem("Exit");
 		menuFile.add(exitItem);
+
 		/* newItem action listener */
 		newItem.addActionListener(newItemListener -> {
 			new Functions(this).newFile();
@@ -74,9 +75,16 @@ public class Notepad extends JFrame {
 		openItem.addActionListener(openItemListener -> {
 			new Functions(this).openFile();
 		});
+		/* saveItem action listener */
+		saveItem.addActionListener(saveItem -> {
+			new Functions(this).save();
+		});
 		/* saveAsItem action listener */
 		saveAsItem.addActionListener(saveAsItemListener -> {
 			new Functions(this).saveAs();
+		});
+		exitItem.addActionListener(exitItemListener -> {
+			new Functions(this).exit();
 		});
 	}
 
